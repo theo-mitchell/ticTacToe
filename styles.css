@@ -1,3 +1,14 @@
 body{
     background-color: black;
+    color:white;
+}
+
+#ticTacToeBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ticTacToeBoardSquare {
+    border: 1px solid;
+    padding: 20px;
 }
