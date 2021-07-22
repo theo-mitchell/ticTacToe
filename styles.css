@@ -3,9 +3,16 @@ body{
     color:white;
 }
 
+#gameArea{
+    display: flex;           /* establish flex container */
+    flex-direction: column;  /* make main axis vertical */
+    justify-content: center; /* center items vertically, in this case */
+    align-items: center;     /* center items horizontally, in this case */
+}
+
 #ticTacToeBoard {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 100px);
 }
 
 .ticTacToeBoardSquare {
