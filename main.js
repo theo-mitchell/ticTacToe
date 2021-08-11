@@ -13,9 +13,11 @@ const gameBoard = (() => {
         
         //Remove the event listener, so it is impossible to override a board square value untill game is reset
         event.target.removeEventListener('click', fillBoardSquare);
-        gameController.checkGameBoardState();
+        gameController.processGameTurn();
         gameController.toggleActivePlayer();
-        console.table(boardSquares);
+
+        //Prints the board to console at the end of each turn, uncomment for debugging
+        // console.table(boardSquares);
     }
 
     const resetGame = () => {
@@ -33,7 +35,10 @@ const gameBoard = (() => {
 })();
 
 const Player = (piece, pieceImageSource) => {
-    return {piece, pieceImageSource}
+    let score = 0;
+    const getScore = () => score;
+    const recordWin = () => ++score;
+    return {piece, pieceImageSource, getScore, recordWin}
 };
 
 const gameController = (() => {
@@ -52,12 +57,17 @@ const gameController = (() => {
         let board = gameBoard.getState();
         let winner = null;
 
+        //Check for ties
+        if (!board.includes(null)) {
+            return "tie";
+        }
+
         // Check vertical wins
         for (let i = 0; i < 3; i++){
             if (board[i] !== null && board[i] === board[i + 3] && board[i] === board[i + 6]){
                 console.log('vertical win!!!!!!!');
                 winner = getWinner(board[i]);
-                console.log(winner);
+                return winner;
             }    
         }
 
@@ -66,7 +76,7 @@ const gameController = (() => {
             if (board[i] !== null && board[i] === board[i + 1] && board[i] === board[i + 2]){
                 console.log('horizontal win!!!!!!!');
                 winner = getWinner(board[i]);
-                console.log(winner);
+                return winner;
             }    
         }
 
@@ -75,12 +85,28 @@ const gameController = (() => {
             if (board[i] !== null && board[i] === board[4] && board[i] === board[8 - i]){
                 console.log('diagonal win!!!!!!!');
                 winner = getWinner(board[i]);
-                console.log(winner);
+                return winner;
             }    
+        }
+
+        return null;
+    }
+
+    const processGameTurn = () => {
+        let winner = checkGameBoardState();
+
+        if (winner !== null) {
+            if (winner !== "tie") {
+                console.log(winner.piece, "won");
+                
+            }else{
+                console.log("its a tie");
+            } 
+            gameBoard.resetGame();
         }
     }
 
-    return {getActivePlayer, toggleActivePlayer, checkGameBoardState}
+    return {getActivePlayer, toggleActivePlayer, processGameTurn}
 })();
 
 //Resets the game once initially to add event listeners to board squares.
