@@ -14,7 +14,6 @@ const gameBoard = (() => {
         //Remove the event listener, so it is impossible to override a board square value untill game is reset
         event.target.removeEventListener('click', fillBoardSquare);
         gameController.processGameTurn();
-        gameController.toggleActivePlayer();
 
         //Prints the board to console at the end of each turn, uncomment for debugging
         // console.table(boardSquares);
@@ -94,6 +93,7 @@ const gameController = (() => {
 
     const processGameTurn = () => {
         let winner = checkGameBoardState();
+        toggleActivePlayer();
 
         if (winner !== null) {
             if (winner !== "tie") {
@@ -106,7 +106,7 @@ const gameController = (() => {
         }
     }
 
-    return {getActivePlayer, toggleActivePlayer, processGameTurn}
+    return {getActivePlayer, processGameTurn}
 })();
 
 //Resets the game once initially to add event listeners to board squares.
