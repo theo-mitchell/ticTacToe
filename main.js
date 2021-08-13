@@ -33,16 +33,16 @@ const gameBoard = (() => {
     return {getState, resetGame}
 })();
 
-const Player = (piece, pieceImageSource) => {
+const Player = (piece, pieceImageSource, scoreboardDiv) => {
     let score = 0;
-    const getScore = () => score;
     const recordWin = () => ++score;
-    return {piece, pieceImageSource, getScore, recordWin}
+    const getScore = () => score;
+    return {piece, pieceImageSource, scoreboardDiv, recordWin, getScore}
 };
 
 const gameController = (() => {
-    const player1 = Player('X', '/img/X.png');
-    const player2 = Player('O', '/img/O.png');
+    const player1 = Player('X', '/img/X.png', document.getElementById("player1Score"));
+    const player2 = Player('O', '/img/O.png', document.getElementById("player2Score"));
 
     let activePlayer = player1;
     const toggleActivePlayer = () => {
@@ -98,9 +98,10 @@ const gameController = (() => {
         if (winner !== null) {
             if (winner !== "tie") {
                 console.log(winner.piece, "won");
-                
+                winner.recordWin();
+                winner.scoreboardDiv.innerHTML = winner.getScore();
             }else{
-                console.log("its a tie");
+                console.log("Its a tie");
             } 
             gameBoard.resetGame();
         }
